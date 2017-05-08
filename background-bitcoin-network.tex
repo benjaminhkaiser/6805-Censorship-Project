@@ -1,0 +1,16 @@
+\subsection{Bitcoin's networking protocol}
+The message transfer protocol that powers Bitcoin is defined abstractly in Nakamoto's original publication \cite{Nakamoto} and further fleshed out in bitcoind, the reference implementation written by Nakamoto that still serves as the default and most popular Bitcoin client. In this section, we will provide a high-level overview of the portion of the protocol relevant to our work. In particular, because we focus on a partitioning attack that severs existing connections, we will not discuss how new clients are bootstrapped, how initial blocks are downloaded, or how further peer connections are established. This leaves the standard relay protocol, which consists of four message types:
+
+\begin{itemize}
+
+\item \textit{inv}: when a transaction or block has been verified by a node, the node announces that the transaction or block is available by sending an \textit{inv} message to all of their neighbors.
+\item \textit{getdata}: when a node receives an \textit{inv} message for a transaction or block that it does not already have a local copy of, it responds with a \textit{getdata} message asking for that block.
+\item \textit{tx}: when a node receives a \textit{getdata} request for a given transaction, it responds with a \textit{tx} message containing the transaction
+\item \textit{block} when a node receives a \textit{getdata} request for a given block, it responds with a \textit{block} message containing the block
+
+\end{itemize}
+
+A node will only propagate a block or transaction to its neighbors if it can verify it. Unverified transactions or blocks are not propagated.
+
+By itself, Bitcoin does not attempt to detect or mitigate partitions. If a partition appears, both portions will continue operating independently and their state will diverge. If the divergence results in subnetworks that produce incompatible transaction histories, they will be unable to merge if the partition is later removed. Decker and Wattenhofer \cite{DeckerWattenhofer2013} observe that detection of network partitions may not be challenging and could be achieved through simple monitoring of the observed aggregate computational power in the network. As Bitcoin has grown in size and influence, such monitoring has begun to take place, and as of this writing it is possible to easily view the total network hashing rate via public websites \cite{sipa}.
+
