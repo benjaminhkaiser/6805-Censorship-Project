@@ -1,0 +1,7 @@
+\section{Network Partitioning}
+Since traffic monitored by the GFW is subject to keyword filtering, we wondered if a situation could arise in which a banned word within a transaction could prevent a valid block from being propagated within China. This could lead to a partition in the network, causing a fork in the blockchain in which those outside of the GFW and those within it build off of different blocks. Given the current implementation of the GFW, only network activity over HTTP is monitored and Bitcoin activity is therefore not subject to filtration. Features could at any point be introduced within the GFW that allow for this vulnerability. 
+
+We attempted to construct a Bitcoin block that would be filtered by the GFW. Arbitrary data has been embedded into blocks before; the most common places that such data is stored in a block are the address fields (by encoding the data in hex), the coinbase transaction, or the scripts\footnote{In one notable case, a simple cross-site scripting (XSS) attack was embedded in a block and was apparently demonstrated to work on blockchain.info\cite{reddit}, although the site has since been patched to properly escape HTML.}. 
+
+In the end we determined that we would need to trick the GFW into interpreting a block as Web traffic of some sort (e.g., DNS or HTTP), which was not feasible. \colorbox{yellow}{(To all, but especially Andrew: is there anything else we}
+\colorbox{yellow}{should say here about what we tried / observed?)}
