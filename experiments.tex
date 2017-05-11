@@ -24,36 +24,3 @@ The possible scenarios we want to examine fall into four categories:
 \item A minority of mining power is unaffected by censorship, a majority of mining power cannot send/recieve messages containing a blacklisted word.
 \item A majority of mining power is unaffected by censorship (Partition 1), a minority of mining power cannot send/recieve messages to/from Partition 1 containing a blacklisted word (Partition 2), a small number of miners is unaffected by censorship and can communicate to both Partitions 1 and 2 without any censorship.
 \end{enumerate}
-
-\section{Expected Results}
-In addition to designing experiments to test how the bitcoind client behaves, we also analyzed its source code....
-\colorbox{yellow}{We've talked about this a lot in person, just need to write it} \colorbox{yellow}{up and reference the source}
-
-\section{Results}
-This section will describe the four experiments we conducted. Our initial aim was to perform a partition attack on the Bitcoin blockchain by creating a transaction containing a word censored by the GFW. When we determined that this was infeasible in practice, we decided to perform a set of experiments to analyze what effects such an attack might have on Bitcoin. The first simulator we ran abstracted away too many of the important details of the Bitcoin protocol, focusing instead on collecting high-level statistics about the network. Our next step was to try to understand the expected behavior of a Bitcoin client located inside of the GFW by directly inspecting the source code of bitcoind. Finally, we worked to deploy and run a more detailed simulator. Unfortunately, configuration issues prevented us from running our intended simulations, so at the moment they are left as future work. However, we do feel that through this process, we developed strong hypotheses about how the network would behave in the presence of a censorship-based partition, and as future work we intend to resolve our configuration issues with the simulator and test those hypotheses.
-
-\subsection{Firewall Testing}
-To test the GFW we first had to obtain access to a system with a censored internet system. 
-
-We attempted to construct a Bitcoin block that would be filtered by the GFW. Arbitrary data has been embedded into blocks before; the most common places that such data is stored in a block are the address fields (by encoding the data in hex), the coinbase transaction, or the scripts\footnote{In one notable case, a simple cross-site scripting (XSS) attack was embedded in a block and was apparently demonstrated to work on blockchain.info\cite{reddit}, although the site has since been patched to properly escape HTML.}. 
-
-In the end we determined that we would need to trick the GFW into interpreting a block as Web traffic of some sort (e.g., DNS or HTTP), which was not feasible.
-\colorbox{yellow}{(To all, but especially Andrew: is there anything else we}
-\colorbox{yellow}{should say here about what we tried / observed? Maybe}
-\colorbox{yellow}{briefly describe how you connected to a VM in China and}
-\colorbox{yellow}{the types of tests you ran?)}
-
-To test the GFW we first had to obtain access to a system with a censored internet system. 
-When a message caused the GFW to block a connection, the connection was reset and the CN machine was unable to connect to the US machine on the same port for a few minutes.
-
-
-\subsection{Simulation}
-Initial analysis of the Bitcoin Simulator built on NS3 showed that the simulator didn't high enough level of fidelity to conduct for our desired experiments. Instead, we focused on using Shadow...
-
-We compiled version 0.9.2 of the bitcoind client\footnote{Shadow required us to use a slightly modified version of 0.9.2 available at https://github.com/amiller/bitcoin/tree/0.9.2-netmine} for use in Shadow. The published instructions for running Shadow's Bitcoin Plugin were significantly outdated, so we created a Docker container that builds their simulator and applies patches so that their original experiment can be recreated\footnote{The Dockerfile that builds this container is available at https://github.com/AndrewFasano/shadow-bitcoin-docker}. In our Docker container, we were able to run a network of 4 bitcoind clients communicating as we broadcast transactions and blocks to one of the clients.
-
-We patched the bitcoind client to drop messages it recieves containing a ``blocked'' keyword.
-
-We reconfigured Shadow to run a network with two groups of two nodes that were unable to communicate with each other. We then sent blocks to only one of these groups, expecting the clients in that group to have a different blockchain than the clients in the other group.We were unable to configure Shadow to run in this fashion due to time limitations.
-
-If we were to get Shadow to seperately partition two network segments, we would have then modified how Shadow sends messages between clients to drop any messages between the two groups where the message contains our blocked keyword.
