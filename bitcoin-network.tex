@@ -1,5 +1,5 @@
 \section{Bitcoin's networking protocol}
-The message transfer protocol that powers Bitcoin is defined abstractly in Nakamoto's original publication \cite{Nakamoto} and further fleshed out in bitcoind, the reference implementation he provided. In this section, we will provide a high-level overview of the portion of the protocol relevant to our work. In particular, because we focus on a partitioning attack that severs existing connections, we will not discuss how new clients are bootstrapped, how initial blocks are downloaded, or how further peer connections are established. This leaves the standard relay protocol, which consists of four message types:
+The message transfer protocol that powers Bitcoin is defined abstractly in Nakamoto's original publication \cite{Nakamoto} and further fleshed out in \texttt{bitcoind}, the reference implementation he provided. In this section, we will provide a high-level overview of the portion of the protocol relevant to our work. In particular, because we focus on a partitioning attack that severs existing connections, we will not discuss how new clients are bootstrapped, how initial blocks are downloaded, or how further peer connections are established. This leaves the standard relay protocol, which consists of four message types:
 
 \begin{itemize}
 

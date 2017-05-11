@@ -1,4 +1,10 @@
 \section{Limitations}
 Speaking broadly, experiments performed on a model are only useful to the degree to which the model accurately represents reality. Even though we were not able to instantiate our model or run our simulations, we plan to do so in the future, so we want to make explicit the limitations of our model and the simplifying assumptions that we made when designing our simulations. 
 
-The simulations were run with all mining nodes acting on an individual basis. In practice, miners typically operate in mining pools in which miners cooperate to find new blocks and subsequently share the rewards \cite{Rosenfeld}.
+\begin{itemize}
+	
+	\item \textit{Mining pools}: In practice, mining pools in which miners cooperate to find new blocks and share the rewards are common \cite{Rosenfeld}. We model mining pools as a single miner who has the cumulative hash power of the pool. This fails to account for scenarios in which miners outside of the GFW contribute to a pool that is managed by a node inside of the GFW.
+	\item \textit{Other limitations?}
+\end{itemize}
+
+
