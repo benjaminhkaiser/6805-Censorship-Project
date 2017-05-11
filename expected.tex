@@ -1,4 +1,18 @@
 \subsection{Expected Results}
-In addition to designing experiments to test how the bitcoind client behaves, we also analyzed its source code....
-\colorbox{yellow}{We've talked about this a lot in person, just need to write it} \colorbox{yellow}{up and reference the source}
+In addition to designing experiments to test how the bitcoind client behaves, we also analyzed its source code. According to the source code, if a client is told that a block exists, but is unable to get a copy of that block and validate it, the client will continue assuming the last head of the blockchain it validated is the current head\footnote{Specifically, line 2668 validation.cpp in bitcoind version 0.14: https://github.com/bitcoin/bitcoin/blob/0.14/src/validation.cpp#L2668}. In the scenario we consider, the censored client would be able to recieve a message from non-censored clients telling it that a new block exists. But when the client then requested the contents of the block from the non-censored clients, the respone containing the new block's data would would never be recieved. From the point of view of the censored client, this is indistingushable from a miner broadcasting headers but not sending the full block data. The source code for bitcoind explicitly describes such an attack and contains logic to ensure, in this scenario, the block is not added to a client's index.
 
+\begin{figure}[h]
+\begin{tikzpicture}
+\node[draw, left of=lefthead] (lefthead) {A};
+\node[draw, right of=righthead] (righthead) {B};
+\node[draw, below of=lefthead] (common) {C};
+\node[draw, below of=common] (common1) {D};
+
+ \path[>=latex, auto = right,every loop]
+
+(lefthead) edge[] node {} (common)
+(righthead) edge[] node {} (common)
+(common) edge[] node {} (common1)
+;     
+\end{tikzpicture}
+\end{figure}
