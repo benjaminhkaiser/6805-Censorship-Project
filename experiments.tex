@@ -1,13 +1,55 @@
-\section{Experiments}
-\colorbox{yellow}{Need some intro text here.}
-we first tried to create a block that would get caught, then once we realized we couldn't do it in practice, we tried the NS3 bitcoin sim, which we determined abstracted away too many important details of the bitcoin client and network. So then we explored the bitcoin client's source code and moved to a more accurate simulator, Shadow.
+\section{Experiment Design}
 
-\subsection{Triggering the GFW}
+To test our hypothesis, we needed to conduct two experiements to understand how the the Great Firewall blocks traffic and how the Bitcoin client behaves when certian blocks cannot be propigated between two groups of clients.
+
+\subsection{Firewall Testing}
+To check if the GFW would prevent the propigation of a Bitcoin block from crossing through its censorship systems, we obtained two machines: one in China and one in the United States. To confirm that our CN machine was affected by the GFW, we attempted to access a blocked websites and confirmed they were inaccessable.
+
+With our two machines, we attempted to send a variety of messages from our US machine to our CN machine and vice versa. We used the netcat UNIX utility to send ASCII messages. When we sent a message causing the GFW to block the connection, we expected the CN machine to be unable to reach the US machine on the same port for a few minutes, as described in~\ref{TODO}.
+
+After validating that the GFW was affecting traffic between our two machines, we will send test messgaes of various formats containing known-blocked words. For each type of message, we will record if the connection is blocked.
+
+\subsection{Simulation}
+By simulating a small-scale version of the Bitcoin network with network censorship in place, we can examine how a censorship-induced fork would affect the network over time. The majority of Bitcoin clients run bitcoind, the reference client implementation of the Bitcoin protocol ~\cite{shadow-bitcoin}.
+
+Data can be collected by simulating an entire bitcoin network with multiple nodes running bitcoind or by simulating the network traffic between nodes.
+
+Shadow~\cite{shadow} running with it's Bitcoin plugin~\cite{shadow-bitcoin} emulates real bitcoind clients in a simulated network that can be used to conduct experiments.
+
+Bitcoin Simulator~\cite{bitcoin-simulator} built on top of NS3~\cite{NS3} simulates network traffic between bitcoin clients. % TODO: more?
+
+The possible scenarios we want to examine fall into four categories:
+\begin{enumerate}
+\item A majority of mining power is unaffected by censorship, a minority of mining power cannot send/recieve messages containing a blacklisted word.
+\item A minority of mining power is unaffected by censorship, a majority of mining power cannot send/recieve messages containing a blacklisted word.
+\item A majority of mining power is unaffected by censorship (Partition 1), a minority of mining power cannot send/recieve messages to/from Partition 1 containing a blacklisted word (Partition 2), a small number of miners is unaffected by censorship and can communicate to both Partitions 1 and 2 without any censorship.
+\end{enumerate}
+
+\section{Expected Results}
+In addition to designing experiments to test how the bitcoind client behaves, we also analyzed its source code....
+\colorbox{yellow}{We've talked about this a lot in person, just need to write it} \colorbox{yellow}{up and reference the source}
+
+\section{Results}
+
+\subsection{Firewall Testing}
+To test the GFW we first had to obtain access to a system with a censored internet system. 
+
 We attempted to construct a Bitcoin block that would be filtered by the GFW. Arbitrary data has been embedded into blocks before; the most common places that such data is stored in a block are the address fields (by encoding the data in hex), the coinbase transaction, or the scripts\footnote{In one notable case, a simple cross-site scripting (XSS) attack was embedded in a block and was apparently demonstrated to work on blockchain.info\cite{reddit}, although the site has since been patched to properly escape HTML.}. 
 
 In the end we determined that we would need to trick the GFW into interpreting a block as Web traffic of some sort (e.g., DNS or HTTP), which was not feasible. \colorbox{yellow}{(To all, but especially Andrew: is there anything else we}
 \colorbox{yellow}{should say here about what we tried / observed?)}
 
-\input{experiments-ns3}
-\input{experiments-btc-source}
-\input{experiments-shadow}
+To test the GFW we first had to obtain access to a system with a censored internet system. 
+When a message caused the GFW to block a connection, the connection was reset and the CN machine was unable to connect to the US machine on the same port for a few minutes.
+
+
+\subsection{Simulation}
+Initial analysis of the Bitcoin Simulator built on NS3 showed that the simulator didn't high enough level of fidelity to conduct for our desired experiments. Instead, we focused on using Shadow...
+
+We compiled version 0.9.2 of the bitcoind client\footnote{Shadow required us to use a slightly modified version of 0.9.2 available at https://github.com/amiller/bitcoin/tree/0.9.2-netmine} for use in Shadow. The published instructions for running Shadow's Bitcoin Plugin were significantly outdated, so we created a Docker container that builds their simulator and applies patches so that their original experiment can be recreated\footnote{The Dockerfile that builds this container is available at https://github.com/AndrewFasano/shadow-bitcoin-docker}. In our Docker container, we were able to run a network of 4 bitcoind clients communicating as we broadcast transactions and blocks to one of the clients.
+
+We patched the bitcoind client to drop messages it recieves containing a ``blocked'' keyword.
+
+We reconfigured Shadow to run a network with two groups of two nodes that were unable to communicate with each other. We then sent blocks to only one of these groups, expecting the clients in that group to have a different blockchain than the clients in the other group.We were unable to configure Shadow to run in this fashion due to time limitations.
+
+If we were to get Shadow to seperately partition two network segments, we would have then modified how Shadow sends messages between clients to drop any messages between the two groups where the message contains our blocked keyword.
