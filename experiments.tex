@@ -1,12 +1,14 @@
 \section{Experiments}
-\colorbox{yellow}{Need some intro text here.}
-we first tried to create a block that would get caught, then once we realized we couldn't do it in practice, we tried the NS3 bitcoin sim, which we determined abstracted away too many important details of the bitcoin client and network. So then we explored the bitcoin client's source code and moved to a more accurate simulator, Shadow.
+This section will describe the four experiments we conducted. Our initial aim was to perform a partition attack on the Bitcoin blockchain by creating a transaction containing a word censored by the GFW. When we determined that this was infeasible in practice, we decided to perform a set of experiments to analyze what effects such an attack might have on Bitcoin. The first simulator we ran abstracted away too many of the important details of the Bitcoin protocol, focusing instead on collecting high-level statistics about the network. Our next step was to try to understand the expected behavior of a Bitcoin client located inside of the GFW by directly inspecting the source code of bitcoind. Finally, we worked to deploy and run a more detailed simulator. Unfortunately, configuration issues prevented us from running our intended simulations, so at the moment they are left as future work. However, we do feel that through this process, we developed strong hypotheses about how the network would behave in the presence of a censorship-based partition, and as future work we intend to resolve our configuration issues with the simulator and test those hypotheses.
 
 \subsection{Triggering the GFW}
 We attempted to construct a Bitcoin block that would be filtered by the GFW. Arbitrary data has been embedded into blocks before; the most common places that such data is stored in a block are the address fields (by encoding the data in hex), the coinbase transaction, or the scripts\footnote{In one notable case, a simple cross-site scripting (XSS) attack was embedded in a block and was apparently demonstrated to work on blockchain.info\cite{reddit}, although the site has since been patched to properly escape HTML.}. 
 
-In the end we determined that we would need to trick the GFW into interpreting a block as Web traffic of some sort (e.g., DNS or HTTP), which was not feasible. \colorbox{yellow}{(To all, but especially Andrew: is there anything else we}
-\colorbox{yellow}{should say here about what we tried / observed?)}
+In the end we determined that we would need to trick the GFW into interpreting a block as Web traffic of some sort (e.g., DNS or HTTP), which was not feasible.
+\colorbox{yellow}{(To all, but especially Andrew: is there anything else we}
+\colorbox{yellow}{should say here about what we tried / observed? Maybe}
+\colorbox{yellow}{briefly describe how you connected to a VM in China and}
+\colorbox{yellow}{the types of tests you ran?)}
 
 \input{experiments-ns3}
 \input{experiments-btc-source}
