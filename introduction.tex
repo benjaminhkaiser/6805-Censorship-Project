@@ -1,4 +1,18 @@
 \section{Introduction}
-The Bitcoin cryptocurrency relies on a shared, global transaction ledger that each participant stores a copy of: a blockchain. We set out to investigate whether Internet censorship, which is widely utilized by many countries, might interfere with the Bitcoin blockchain by preventing those behind the wall of censorship from reaching consensus with those outside the wall. In particular, we were curious if someone intent on destabilizing the blockchain could craft a Bitcoin block that would be filtered by a country's censorship apparatus and what the effects on the blockchain might be in such a scenario.
+The Bitcoin cryptocurrency relies on a shared, global transaction ledger that each participant can agree on and independently validate. 
+When new blocks are created that can be added to this ledger, the blocks are broadcast over the Internet between nodes participating in the Bitcoin network. 
+If all published blocks could be guaranteed to reach every other client in the network, all clients would always, eventually, have a consistent view of the network at a given point in time. 
+However, this may not always be the case as a large number of Bitcoin users, such as those in China, are seperated from their peers by internet censorship systems. 
+With specific messages embedded in a block published on the blockchain, it may be possible to force those censorship systems to inadvertently prevent censored minors from viewing a block the rest of the world agrees on.
+We set out to investigate how Internet censorship systems could prevent Bitcoin users reaching consensus across their borders.
+In particular, we analyze the feasability and impacts of an attacker embedding a malicious transaction into a block on the Bitcoin blockchain that would cause an internet censorship system to prevent that block from being visible to Bitcoin users behind the censorship system.
+We examine the current implementation of the Great Firewall of China as well as a hypothetical system that drops any TCP packets that contain a censored word.
+%We first conducted a research survey and performed tests using a virtual machine located within China to determine how the GFW functions. 
+%We were unable to construct a Bitcoin block that would be filtered by the GFW in its configuration at the time of writing. 
 
-We focused our efforts on the censorship conducted by China, known as the Great Firewall of China (GFW). We first conducted a research survey and performed some tests using a virtual machine located within China to determine how the GFW functions. Unfortunately, we were unable to construct a block that would be filtered in practice by the GFW. In order to pursue the idea further, we next conducted experiments to test the impact of a network partition caused by a block being filtered at a country's border. We believe our results are of interest because Internet censorship techniques are always changing, and although the GFW is not currently censoring Bitcoin traffic, it is conceivable that it or another censorship regime may at some point.
+%To understand the impacts of such an attack on a vulnerable censorship system,
+We designed a set of simulations to analyze how Bitcoin clients would behave if TCP packets containing information about a block were unable to be sent between groups of users.
+Our simulations also examine the long-term impact on global blockchain concensus both when a majority of minors are uncensored or when the majoriy is censored.
+
+% Move to conclusion?
+%The analysis of hypothetical censorship systems are of interest because Internet censorship techniques are always changing, and although the GFW is not currently censoring Bitcoin traffic, it is conceivable that it or another censorship regime may at some point.
