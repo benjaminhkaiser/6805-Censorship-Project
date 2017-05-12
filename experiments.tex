@@ -27,3 +27,7 @@ The possible scenarios we wanted to examine fall into four categories:
 \item 30\% of mining power unaffected by censorship with 70\% unable to send/receive messages, approximately reflecting the real-world distribution of Bitcoin hash power outside and inside of China.
 \item A majority of mining power is unaffected by censorship (partition $P1$), a minority of mining power cannot send/receive messages to/from $P1$ containing a blacklisted word ($P2$), and a small number of miners is unaffected by censorship and can communicate to both Partitions 1 and 2 without any censorship ($P3$).
 \end{enumerate}
+
+We aimed to embed a transaction with well-documented blacklisted words through using the op code OP_RETURN, which marks the transaction output as invalid but still allows for the transaction to be propagated. There are a variety of other methods including sending a transaction to a fake address name containing a blacklisted keyword. Through the use of the coinbase field, a miner could also launch this attack by appending blacklisted keywords onto a block 
+
+
