@@ -17,10 +17,10 @@
 }
 
 \subsection{Expected Results}
-Suppose we have client C, a censored miner sitting behind censorship firewall,  client U, an uncensored miner, and block B_0, which is the last valid block known by all parties. Now suppose U mines block B_1 containing a transaction with a blacklisted keyword. U transmits an inv message about B_1. Since C has never seen B_1, it requests the full block from U by transmitting a getdata message for B_1. U begins transmitting C a block message for B_1, but the censorship firewall notices a blacklisted keyword and intervenes.
-Regardless as to whether the censorship firewall truncates the transmission of B_1 from U to C or simply resets the connection, the end result is that C will never receive B_1 but will know of its existence (since it received the inv message about B_1).
+Suppose we have client C, a censored miner sitting behind censorship firewall,  client U, an uncensored miner, and block $B_0$, which is the last valid block known by all parties. Now suppose U mines block $B_1$ containing a transaction with a blacklisted keyword. U transmits an inv message about $B_1$. Since C has never seen $B_1$, it requests the full block from U by transmitting a getdata message for $B_1$. U begins transmitting C a block message for $B_1$, but the censorship firewall notices a blacklisted keyword and intervenes.
+Regardless as to whether the censorship firewall truncates the transmission of $B_1$ from U to C or simply resets the connection, the end result is that C will never receive $B_1$ but will know of its existence (since it received the inv message about $B_1$).
 
-To better understand what would happen if a node knew about the existence of a block which it could never retrieve, we examined the source code to bitcoind. In Bitcoin, clients learn of new blocks by listening for block header broadcasts. Once it hears of a new block header, the client attempts to download the block. The reference client keeps track of the active chain; however, it will only ever update the active chain once the block header and the full block are both received and validated. According to a comment in the source\footnote{Specifically, line 2668 validation.cpp in bitcoind version 0.14: https://github.com/bitcoin/bitcoin/blob/0.14/src/validation.cpp#L2668}, this logic was introduced to defend against malicious miners trying to obtain a competitive advantage by broadcasting headers but witholding blocks. Therefore, we expect C to continue mining off B_0, the previously known block thereby causing a fork.
+To better understand what would happen if a node knew about the existence of a block which it could never retrieve, we examined the source code to bitcoind. In Bitcoin, clients learn of new blocks by listening for block header broadcasts. Once it hears of a new block header, the client attempts to download the block. The reference client keeps track of the active chain; however, it will only ever update the active chain once the block header and the full block are both received and validated. According to a comment in the source\footnote{Specifically, line 2668 validation.cpp in bitcoind version 0.14: https://github.com/bitcoin/bitcoin/blob/0.14/src/validation.cpp#L2668}, this logic was introduced to defend against malicious miners trying to obtain a competitive advantage by broadcasting headers but witholding blocks. Therefore, we expect C to continue mining off $B_0$, the previously known block thereby causing a fork.
 
 \begin{figure}[h]
 \begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
@@ -39,8 +39,9 @@ To better understand what would happen if a node knew about the existence of a b
 \caption{After a censored block is mined, miners try extending different blocks}
 \end{figure}
 
-\subsubsection{Censored minority % TODO the figures aren't going in the sections because we don't have enough text around them}
-\begin{figure}[h]
+%\subsubsection{Censored minority} % TODO the figures aren't going in the sections because we don't have enough text around them}
+
+\begin{figure}[r]
 \begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
   %\node (majority2)[majority, above of=majority1] {Majority block};
 
@@ -115,4 +116,4 @@ To better understand what would happen if a node knew about the existence of a b
     \draw[->]             (majority2) -- (majority1);
 \end{tikzpicture}
 \caption{Since the majority of mining power is mining off one fork, that fork will eventually grow to be longer than the other and all miners will agree on it }
-\end{figure}
+%In addition to designing experiments to test how the bitcoind client behaves, we also analyzed its source code. According to the source code, if a client is told that a block exists, but is unable to get a copy of that block and validate it, the client will continue assuming the last head of the blockchain it validated is the current head\footnote{Specifically, line 2668 validation.cpp in bitcoind version 0.14: https://github.com/bitcoin/bitcoin/blob/0.14/src/validation.cpp#L2668}. In the scenario we consider, the censored client would be able to recieve a message from non-censored clients telling it that a new block exists. But when the client then requested the contents of the block from the non-censored clients, the respone containing the new block's data would would never be recieved. From the point of view of the censored client, this is indistingushable from a miner broadcasting headers but not sending the full block data. The source code for bitcoind explicitly describes such an attack and contains logic to ensure, in this scenario, the block is not added to a client's index.
