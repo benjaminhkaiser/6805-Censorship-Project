@@ -29,7 +29,7 @@ To better understand what would happen if a node knew about the existence of a b
 
   \node (fmine)[uncensoredminer, above of=bad, yshift=.8cm] {Uncensored miner};
   \node (cmine)[censoredminer, right of=bad, xshift=3.5cm] {Censored miner};
-  \node (start)  [common, below of=bad]    {Common block$_0$};
+  \node (start)  [common, below of=bad]    {Common block$_1$};
 
     \draw[->]             (bad) -- (start);
     \draw[->]             (fmine) -- node{extends} (bad);
