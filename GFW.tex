@@ -1,16 +1,17 @@
 \section{The Great Firewall of China}
-There is no consensus about the precise technical underpinnings of the GFW, as conflicting observations have been made. In particular, there is conflict about whether or not it is stateful -- i.e., whether it stores and uses information about the packets it intercepts\footnote{The most recent results, in Xu et. al\cite{Xu2011}, indicate that the GFW does record state}. However, the basic mechanisms employed are known to be\cite{GFWStanford}:
+There is no consensus about the precise technical underpinnings of the GFW, as conflicting observations have been made. In particular, there is conflict about whether or not it is stateful -- i.e., whether it stores and uses information about the packets it intercepts\footnote{The most recent results, in Xu et. al\cite{Xu2011}, indicate that the GFW does record state}. However, according to \cite{GFWStanord} the basic mechanisms employed are known to be:
 
 \begin{itemize}
 \item \textit{IP address filtering}:
-The GFW blocks specific IP addresses from receiving traffic by dropping all packets associated with it. This assures that the GFW's reach extends to all content produced by a host's IP, rather than just the few specified domains.
+The GFW blocks specific IP addresses from receiving traffic by dropping all packets associated with it. This ensures that the GFW's reach extends to all content produced by a host's IP, rather than just the few specified domains.
 
 \item \textit{DNS misdirection (hijacking)}:
-When requesting a blocked host name, there are cases in which the DNS servers under the GFW will return a different IP address than the one that corresponds to the domain name requested. The Chinese government can effectively replace the content with material that is more favorable to their interests.
+When requesting a blocked host name, there are cases in which the DNS servers under the GFW will return a different IP address than the one that corresponds to the domain name requested. The Chinese government can effectively replace the content on any website with material that is more favorable to their interests.
 
 \item \textit{Keyword filtering}:
-If a banned keyword appears in a URL, after a completed TCP handshake, the GFW will send reset packets to both the source and destination, blocking access to the requested content. Even if a keyword is not explicitly in the URL but appears within the HTML response, the content is also denied. In this particular instance, pages often begin to display but are then truncated after the discovery of a keyword.
+If a banned keyword appears in a URL, after a completed TCP handshake, the GFW will send reset packets to both the source and destination, blocking access to the requested content. Even if a keyword is not explicitly in the URL but appears within the HTML response, the content is also denied\footnote{We were unable to reproduce this behavior at the time of writing.}. In this particular instance, pages often begin to display but are then truncated after the discovery of a keyword.
 \end{itemize}
 
 \subsection{Impact on Bitcoin}
-The only direct impact that the GFW has on the Bitcoin network is a minor delay added to every packet. Due to this and normal Bitcoin block propagation delays, Chinese miners will hear about blocks mined outside of China later than ones within the country, causing a communication barrier. This actually creates a disadvantage for those outside of China since the majority of the hash power in Bitcoin is located inside of China. This causes problems, most recently during the debate surrounding a proposed block size increase. If the size were to increase, Chinese miners would be subject to further delays, potentially jeopardizing profits. \cite{nasdaq}
+The GFW adds a minor delay to every packet set to and from the Bitcoin network through it. This delay, combined with normal Bitcoin block propagation delays cause Chinese miners to hear about blocks mined outside of China later than ones mined within the country, causing a communication barrier. This creates a disadvantage for miners outside of China since the majority of the hash power in Bitcoin is located inside of China. If the current proposals to increase the block size used by Bitcoin are accepted, this delay would increase and potentially lower the profitability of mining Bitcoin in China.  \cite{nasdaq}
+%TODO: this whole paragraph needs a citation
