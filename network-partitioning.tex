@@ -1,3 +1,5 @@
-\section{Network Partitioning}
-Since traffic monitored by the GFW is subject to keyword filtering, we wondered if a situation could arise in which a banned word within a transaction could prevent a valid block from being propagated within China. This could lead to a partition in the network, causing a fork in the blockchain in which those outside of the GFW and those within it build off of different blocks. Given the current implementation of the GFW, only network activity over HTTP is monitored and Bitcoin activity is therefore not subject to filtration. Features could at any point be introduced within the GFW that allow for this vulnerability. 
+\section{Network Partitioning} % TODO This needs work
+A network partition could be introduced if traffic monitored by a censorship system (such as the GFW) blocks network traffic describing a mined block that contains a banned word.
+If this were to happen, the valid block would be visible to the entire world, except the users behind the censorship system. The uncensored users would mine off the head of the blockchain while the censored users would mine off an older block causing a fork.
+Depending on the ratio of mining power between the censored and uncensored miners, the two groups may both continue mining on their forked blockchains, despite the fact that one blockchain will be shorter than the others.
 
