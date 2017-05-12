@@ -1,3 +1,10 @@
 \begin{abstract}
-Abstract goes here.
+The Bitcoin network would be vulnerable to a network partition attack if an Internet censorship system attempted to filter messages embedded on the block chain.
+We explored this vulnerability by assessing the current properties of China's Internet censorship system and the mechanisms through which blocks are propagated by miners.
+We discuss experiments we designed to simulate the impact of this attack on the Bitcoin network in various configurations with a hypothetical censorship system. For each of these experiments, we used source-code analysis to hypothesize expected results.
+%Although we were unable to run the designed simulations,
+We experimentally validated that this attack is not currently feasible against China's censorship system since, at time of writing, it ignores Bitcoin messages.
+However, if this were to change, that could introduce this vulnerability and allow an attacker to cause a damaging partition in the Bitcoin network.
+In our future work, we plan to run the simulations we designed and compare the generated data to our hypothesized results.
+%could coerce the Bitcoin network into dropping recently mined blocks and favoring one fork over another.
 \end{abstract}
