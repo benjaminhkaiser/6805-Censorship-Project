@@ -7,9 +7,9 @@ To test our hypothesis, we needed to conduct two experiments to understand how t
 \subsubsection{Firewall Testing}
 To check if the GFW would prevent the propagation of a Bitcoin block from crossing through its censorship systems, we obtained two machines: one in China (CN) and one in the United States (US). To confirm that our CN machine was affected by the GFW, we attempted to access several blocked websites and confirmed that they were inaccessible.
 
-We attempted to send a variety of messages from our US machine to our CN machine and vice versa. We used the netcat UNIX utility to send ASCII messages. When we sent a message causing the GFW to block the connection, we expected the CN machine to be unable to reach the US machine on the same port for a few minutes, as described in~\ref{TODO}.
+We attempted to send a variety of messages from our US machine to our CN machine and vice versa. We used the netcat UNIX utility to send ASCII messages. When we sent a message causing the GFW to block the connection, we expected the CN machine to be unable to reach the US machine on the same port for a few minutes, as described in~\ref{ignoring}.
 
-After validating that the GFW was affecting traffic between our two machines, we sent test messages of various formats containing known-blocked words. For each type of message, we recorded if the connection was blocked.
+After validating that the GFW was affecting traffic between our two machines, we sent test messages of various formats containing known, blocked words. For each type of message, we recorded if the connection was blocked.
 
 \subsubsection{Simulation}
 By simulating a small-scale version of the Bitcoin network with network censorship in place, we aimed to examine how a censorship-induced fork would affect the network over time. The majority of Bitcoin nodes run \texttt{bitcoind}, the reference client implementation of the Bitcoin protocol ~\cite{shadow-bitcoin}.

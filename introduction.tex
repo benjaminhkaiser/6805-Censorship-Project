@@ -2,7 +2,7 @@
 The Bitcoin cryptocurrency relies on a shared, global transaction ledger that each participant can agree on and independently validate. 
 When new blocks are created that can be added to this ledger, they are broadcast over the Internet between participating nodes in a peer-to-peer protocol. 
 If all published blocks could be guaranteed to reach every other client in the network, all clients would eventually have a consistent view of the ledger at any given point in time. 
-However, this assumption may not always hold true. A large number of Bitcoin nodes, such as those in China, are separated from their peers by internet censorship systems. 
+However, this assumption may not always hold true. A large number of Bitcoin nodes, such as those in China, are separated from their peers by Internet censorship systems. 
 With specific messages embedded in a block published on the blockchain, it may be possible to force those censorship systems to inadvertently prevent censored miners from viewing a block the rest of the world agrees on.
 We set out to investigate how Internet censorship systems could prevent Bitcoin users from reaching consensus across their borders.
 In particular, we analyze the feasibility and impact of an attacker embedding a malicious transaction into a block on the Bitcoin blockchain that would cause an Internet censorship system to prevent that block from being visible to Bitcoin users behind the censorship system.
