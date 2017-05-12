@@ -1,21 +1,20 @@
 \section{Experiments}
-This section will describe the experiments we conducted. Our initial aim was to validate our hypothesis through a partition attack on the Bitcoin blockchain by creating a transaction containing a word censored by the GFW. When we determined that this was infeasible in practice, we decided to perform a set of experiments to analyze what effects such an attack might have on Bitcoin. The first simulator we ran abstracted away too many of the important details of the Bitcoin protocol, focusing instead on collecting high-level statistics about the network. Our next step was to try to understand the expected behavior of a Bitcoin client located inside of the GFW by directly inspecting the source code of \texttt{bitcoind}. Finally, we worked to deploy and run a more detailed simulator. Unfortunately, configuration issues prevented us from running our intended simulations, so at the moment they are left as future work. However, we do feel that through this process, we developed strong hypotheses about how the network would behave in the presence of a censorship-based partition, and as future work we intend to resolve our configuration issues with the simulator and test those hypotheses.
+This section will describe the experiments we conducted. Our initial aim was to test our hypothesis by actually creating, in practice, a transaction containing a word censored by the GFW. When we determined that this was infeasible, we decided to perform a set of experiments to analyze what effects such an attack might have on Bitcoin. The first simulator we ran abstracted away too many of the important details of the Bitcoin protocol, focusing instead on collecting high-level statistics about the network. Our next step was to try to understand the expected behavior of a Bitcoin client located inside of the GFW by directly inspecting the source code of \texttt{bitcoind}. Finally, we worked to deploy and run a more detailed simulator. Unfortunately, configuration issues prevented us from running our intended simulations, so at the moment they are left as future work. However, we do feel that through this process, we developed strong hypotheses about how the network would behave in the presence of a censorship-based partition, and as future work we intend to resolve our configuration issues with the simulator and test those hypotheses.
 
 \subsection{Experiment Design}
-
 To test our hypothesis, we needed to conduct two experiments to understand how the the GFW blocks traffic and how the Bitcoin client behaves when certain blocks cannot be propagated between two groups of clients.
 
 \subsubsection{Firewall Testing}
-To check if the GFW would prevent the propagation of a Bitcoin block from crossing through its censorship systems, we obtained two machines: one in China and one in the United States. To confirm that our CN machine was affected by the GFW, we attempted to access several blocked websites and confirmed that they were inaccessible.
+To check if the GFW would prevent the propagation of a Bitcoin block from crossing through its censorship systems, we obtained two machines: one in China (CN) and one in the United States (US). To confirm that our CN machine was affected by the GFW, we attempted to access several blocked websites and confirmed that they were inaccessible.
 
 We attempted to send a variety of messages from our US machine to our CN machine and vice versa. We used the netcat UNIX utility to send ASCII messages. When we sent a message causing the GFW to block the connection, we expected the CN machine to be unable to reach the US machine on the same port for a few minutes, as described in~\ref{TODO}.
 
-After validating that the GFW was affecting traffic between our two machines, we sent test messages of various formats containing known-blocked words. For each type of message, we recorded if the connection is blocked.
+After validating that the GFW was affecting traffic between our two machines, we sent test messages of various formats containing known-blocked words. For each type of message, we recorded if the connection was blocked.
 
 \subsubsection{Simulation}
-By simulating a small-scale version of the Bitcoin network with network censorship in place, we can examine how a censorship-induced fork would affect the network over time. The majority of Bitcoin nodes run \texttt{bitcoind}, the reference client implementation of the Bitcoin protocol ~\cite{shadow-bitcoin}.
+By simulating a small-scale version of the Bitcoin network with network censorship in place, we aimed to examine how a censorship-induced fork would affect the network over time. The majority of Bitcoin nodes run \texttt{bitcoind}, the reference client implementation of the Bitcoin protocol ~\cite{shadow-bitcoin}.
 
-Data can be collected by simulating an entire bitcoin network with multiple nodes running \texttt{bitcoind} or by simulating the network traffic between nodes.
+Data can be collected simply by simulating the network traffic between nodes, but a thorough study should include a simulation of an actual Bitcoin network with nodes running \texttt{bitcoind}.
 
 Bitcoin Simulator~\cite{bitcoin-simulator} built on top of NS3~\cite{NS3} simulates network traffic between bitcoin clients. % TODO: more?
 
@@ -25,6 +24,6 @@ The possible scenarios we wanted to examine fall into four categories:
 \begin{enumerate}
 \item 51\% of mining power is unaffected by censorship, meaning that 49\% of mining power behind the censor cannot send/receive messages containing a blacklisted word.
 \item 49\% of mining power is unaffected by censorship, meaning that 51\% of mining power behind the censor cannot send/receive messages containing a blacklisted word.
-\item 30\% of mining power unaffected by censorship with 70\% unable to send/receive messages, approximately reflecting the breakdown of the bitcoin network.
+\item 30\% of mining power unaffected by censorship with 70\% unable to send/receive messages, approximately reflecting the real-world distribution of Bitcoin hash power outside and inside of China.
 \item A majority of mining power is unaffected by censorship (partition $P1$), a minority of mining power cannot send/receive messages to/from $P1$ containing a blacklisted word ($P2$), and a small number of miners is unaffected by censorship and can communicate to both Partitions 1 and 2 without any censorship ($P3$).
 \end{enumerate}
