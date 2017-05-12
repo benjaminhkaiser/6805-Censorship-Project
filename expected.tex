@@ -22,34 +22,94 @@ In addition to designing experiments to test how the bitcoind client behaves, we
 \begin{figure}[h]
 \begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
   %\node (majority2)[majority, above of=majority1] {Majority block};
-  \node (bad)   [blacklist]                {\textbf{Blacklisted block}: Majority$_2$};
+  \node (bad)   [blacklist]                {\textbf{Censored}: block$_2$};
 
-  \node (fmine)[uncensoredminer, above of=bad] {Uncensored miner};
-  \node (cmine)[censoredminer, right of=bad, xshift=4cm] {Censored miner};
+  \node (fmine)[uncensoredminer, above of=bad, yshift=.8cm] {Uncensored miner};
+  \node (cmine)[censoredminer, right of=bad, xshift=3.5cm] {Censored miner};
   \node (start)  [common, below of=bad]    {Common block$_0$};
 
     \draw[->]             (bad) -- (start);
     \draw[->]             (fmine) -- node{extends} (bad);
-    \draw[->]             (cmine) -- node{extends} (start);
-    \draw[->]             (cmine) -- node{ignores} (bad);
+    \draw[->]             (cmine) |- node{extends} (start);
+    \draw[red,dashed]             (cmine) --node{$|$} (bad);
 \end{tikzpicture}
-\caption{Expected results immediately after a censored block is mined}
+\caption{After a censored block is mined, miners try extending different blocks}
+\end{figure}
+
+\subsubsection{Censored minority % TODO the figures aren't going in the sections because we don't have enough text around them}
+\begin{figure}[h]
+\begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
+  %\node (majority2)[majority, above of=majority1] {Majority block};
+
+  \node (bad)   [blacklist]                {\textbf{Censored}: block$_2$};
+  \node (start)  [common, below of=bad]    {Common block$_1$};
+  \node (majority1)[majority, above of=bad] {Majority$_4$};
+  \node (miner)[censoredminer, right of=bad, xshift=3.5cm] {Censored miner};
+
+    \draw[red]          (miner) -- node{invalid} (majority1);
+    \draw[red,dashed]     (miner) -- node{$|$} (bad);
+    \draw[->]             (miner) |- node{extends} (start);
+    \draw[->]             (majority1) -- (bad);
+    \draw[->]             (bad) -- (start);
+\end{tikzpicture}
+\caption{Censored minors will see future blocks added by uncensored miners, but will not be able to validate their chain so they will be ignored}
+\end{figure}
+
+% TODO the figures aren't going in the sections because we don't have enough text around them
+\subsubsection{Censored majority}
+
+\begin{figure}[h]
+\begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
+  %\node (majority2)[majority, above of=majority1] {Majority block};
+
+  \node (bad)   [blacklist]                {\textbf{Censored}: block$_2$};
+  \node (start)  [common, below of=bad]    {Common block$_1$};
+  \node (majority1)[majority, right of=bad, xshift=3.5cm] {Majority$_2$};
+  \node (miner)[censoredminer, above of=majority1, yshift=.8cm] {Censored miner};
+
+    \draw[->]          (miner) -- node{extends} (majority1);
+    \draw[red,dashed]     (miner) -- node{$|$} (bad);
+    \draw[->]             (majority1) |- (start);
+    \draw[->]             (bad) -- (start);
+\end{tikzpicture}
+\caption{If censored miners mine faster than uncensored miners, the two forks will eventually grow to be of equal length}
 \end{figure}
 
 \begin{figure}[h]
 \begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
   %\node (majority2)[majority, above of=majority1] {Majority block};
 
-  \node (bad)   [blacklist]                {\textbf{Blacklisted block}: Majority$_2$};
+  \node (bad)   [blacklist]                {\textbf{Censored}: block$_2$};
   \node (start)  [common, below of=bad]    {Common block$_1$};
-  \node (majority1)[majority, above of=bad] {Majority$_4$};
-  \node (miner)[uncensoredminer, above of=majority1, yshift=1cm] {Uncensored miner};
-  \node (minority)[minority, right of=majority1, xshift=4cm] {Censored Minority$_2$};
+  \node (majority1)[majority, right of=bad, xshift=3.5cm] {Majority$_2$};
+  \node (miner)[uncensoredminer, above of=bad, yshift=.8cm] {Uncensored miner};
 
-    \draw[->]             (miner) -- node{ignores} (minority);
-    \draw[->]             (miner) -- node{extends} (majority1);
-    \draw[->]             (majority1) -- (bad);
+    \draw[->]          (miner) -- node{extends} (majority1);
+    \draw[->]     (miner) -- node{extends} (bad);
+    \draw[->]             (majority1) |- (start);
     \draw[->]             (bad) -- (start);
 \end{tikzpicture}
-\caption{Expected results when a minority is censored, from the perspective of an uncensored minor}
+\caption{Uncensored miners can mine off of either block when the forked chains are of equal length}
+\end{figure}
+
+\begin{figure}[h]
+\begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
+  %\node (majority2)[majority, above of=majority1] {Majority block};
+
+  \node (bad)   [blacklist]                {\textbf{Censored}: block$_2$};
+  \node (start)  [common, below of=bad]    {Common block$_1$};
+  \node (majority1)[common, right of=bad, xshift=3.5cm] {Majority$_2$};
+  \node (majority2)[common, above of=majority1] {Majority$_3$};
+  \node (cminer)[censoredminer, above of=majority2, yshift=.8cm] {Censored miner};
+  \node (fminer)[uncensoredminer, above of=bad, yshift=1.8cm] {Uncensored miner};
+
+    \draw[red,dashed]     (cminer) -- node{$|$} (bad);
+    \draw[red,dashed]     (fminer) -- node{ignores} (bad);
+    \draw[->]     (cminer) --node{extends} (majority2);
+    \draw[->]     (fminer) --node{extends} (majority2);
+    \draw[->]             (majority1) |- (start);
+    \draw[->]             (bad) -- (start);
+    \draw[->]             (majority2) -- (majority1);
+\end{tikzpicture}
+\caption{Since the majority of mining power is mining off one fork, that fork will eventually grow to be longer than the other and all miners will agree on it }
 \end{figure}
