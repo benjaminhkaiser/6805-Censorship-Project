@@ -1,5 +1,5 @@
-\section{Network Partitioning} % TODO This needs work
-A network partition could be introduced if traffic monitored by a censorship system (such as the GFW) blocks network traffic describing a mined block that contains a banned word.
-If this were to happen, the valid block would be visible to the entire world, except the users behind the censorship system. The uncensored users would mine off the head of the blockchain while the censored users would mine off an older block causing a fork.
-Depending on the ratio of mining power between the censored and uncensored miners, the two groups may both continue mining on their forked blockchains, despite the fact that one blockchain will be shorter than the others.
+\section{Network Partitioning}
+Internet censorship techniques in use are always changing. Therefore, even though the GFW is not currently censoring Bitcoin traffic, it is conceivable that it or another censorship regime may at some point. The remainder of this paper will focus on how a network partition could be introduced  into Bitcoin if a (hypothetical) censorship regime filtered valid blocks containing banned works.
+At a high level, the obvious result is that the valid block would be visible to the entire world except for the nodes behind the censorship system. The uncensored users would mine off the head of the blockchain while the censored users would mine off of a different block, causing a fork.
+Depending on the ratio of mining power between the censored and uncensored miners, the two groups may both continue mining on their forked blockchains, despite the fact that one blockchain will be shorter than the others. Until the partition is removed or circumvented, they will never be able to reach consensus.
 

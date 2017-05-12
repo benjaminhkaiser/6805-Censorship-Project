@@ -13,8 +13,4 @@ If a banned keyword appears in a URL, after a completed TCP handshake, the GFW w
 \end{itemize}
 
 \subsection{Impact on Bitcoin}
-The GFW adds a minor delay to every packet set to and from the Bitcoin network through it. This delay, combined with normal Bitcoin block propagation delays cause Chinese miners to hear about blocks mined outside of China later than ones mined within the country, causing a communication barrier. This creates a disadvantage for miners outside of China since the majority of the hash power in Bitcoin is located inside of China. If the current proposals to increase the block size used by Bitcoin are accepted, this delay would increase and potentially lower the profitability of mining Bitcoin in China.  \cite{nasdaq}
-%TODO: this whole paragraph needs a citation
-
-Given the current implementation of the GFW, only network activity over HTTP is censored and Bitcoin activity, while slightly delayed, is not subject to filtration. 
-This means that those affected by the GFW's censorship could embed information that would be free from censorship on Bitcoin's blockchain to bypass restrictions.
+Given the current implementation of the GFW, only network activity over HTTP is censored and Bitcoin activity, while slightly delayed, is not subject to filtration\footnote{This means that Bitcoin blocks could be used as a covert channel for smuggling censored information in and out of China.} However, this delay, combined with normal Bitcoin block propagation delays, cause Chinese miners to hear about blocks mined outside of China later than ones mined within the country, causing a communication barrier. This creates a disadvantage for miners outside of China since the majority of the hash power in Bitcoin is located inside of China. If the current proposals to increase the block size used by Bitcoin are accepted, this delay would increase and potentially lower the profitability of mining Bitcoin in China.  \cite{nasdaq}

@@ -17,10 +17,10 @@
 }
 
 \subsection{Expected Results}
-Suppose we have client C, a censored miner sitting behind censorship firewall,  client U, an uncensored miner, and block $B_0$, which is the last valid block known by all parties. Now suppose U mines block $B_1$ containing a transaction with a blacklisted keyword. U transmits an inv message about $B_1$. Since C has never seen $B_1$, it requests the full block from U by transmitting a getdata message for $B_1$. U begins transmitting C a block message for $B_1$, but the censorship firewall notices a blacklisted keyword and intervenes.
-Regardless as to whether the censorship firewall truncates the transmission of $B_1$ from U to C or simply resets the connection, the end result is that C will never receive $B_1$ but will know of its existence (since it received the inv message about $B_1$).
+Suppose we have client $C$, a censored miner, sitting behind a censorship firewall, a client $U$ who is uncensored, and a block $B_0$ which is the last valid block known by all parties before the partition emerged. Now suppose $U$ mines block $B_1$ containing a transaction with a blacklisted keyword. U transmits an \textit{inv} message about $B_1$. Since $C$ has never seen $B_1$, it requests the full block from $U$ by transmitting a \textit{getdata} message for $B_1$. $U$ begins transmitting $C$ a \textit{block} message for $B_1$, but the censorship firewall notices a blacklisted keyword and intervenes. This can be seen in Figure~\ref{fig:censor}.
+Regardless as to whether the censorship firewall truncates the transmission of $B_1$ from $U$ to $C$ or simply resets the connection, the end result is that $C$ will never receive $B_1$ but will know of its existence (since it received the \textit{inv} message about $B_1$).
 
-To better understand what would happen if a node knew about the existence of a block which it could never retrieve, we examined the source code to bitcoind. In Bitcoin, clients learn of new blocks by listening for block header broadcasts. Once it hears of a new block header, the client attempts to download the block. The reference client keeps track of the active chain; however, it will only ever update the active chain once the block header and the full block are both received and validated. According to a comment in the source\footnote{Specifically, line 2668 validation.cpp in bitcoind version 0.14: https://github.com/bitcoin/bitcoin/blob/0.14/src/validation.cpp#L2668}, this logic was introduced to defend against malicious miners trying to obtain a competitive advantage by broadcasting headers but witholding blocks. Therefore, we expect C to continue mining off $B_0$, the previously known block thereby causing a fork.
+To better understand what would happen if a node knew about the existence of a block which it could never retrieve, we examined the source code to \texttt{bitcoind}. In Bitcoin, clients learn of new blocks by listening for block header broadcasts. Once it hears of a new block header, the client attempts to download the block. The reference client keeps track of the active chain; however, it will only ever update the active chain once the block header and the full block are both received and validated. According to a comment in the source\footnote{Specifically, line 2668 of \texttt{validation.cpp} in \texttt{bitcoind} version 0.14~\cite{bitcoind-source}}, this logic was introduced to defend against malicious miners trying to obtain a competitive advantage by broadcasting headers but withholding blocks. Therefore, we expect $C$ to continue mining off $B_0$, the previously known block, thereby causing a fork.
 
 \begin{figure}[h]
 \begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
@@ -37,9 +37,11 @@ To better understand what would happen if a node knew about the existence of a b
     \draw[red,dashed]             (cmine) --node{$|$} (bad);
 \end{tikzpicture}
 \caption{After a censored block is mined, miners try extending different blocks}
+\label{fig:censor}
 \end{figure}
 
-%\subsubsection{Censored minority} % TODO the figures aren't going in the sections because we don't have enough text around them}
+\subsubsection{Censored minority}
+Figure~\ref{fig:censored-minority} shows the scenario in which the minority of hash power is behind the censor. Censored miners will see future blocks added by uncensored miners, but will not be able to validate their chain, so they will be ignored.
 
 \begin{figure}[h]
 \begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
@@ -56,11 +58,13 @@ To better understand what would happen if a node knew about the existence of a b
     \draw[->]             (majority1) -- (bad);
     \draw[->]             (bad) -- (start);
 \end{tikzpicture}
-\caption{Censored miners will see future blocks added by uncensored miners, but will not be able to validate their chain so they will be ignored}
+\caption{A model in which the minority of hash power is located behind the censor}
+\label{fig:censored-minority}
 \end{figure}
 
-% TODO the figures aren't going in the sections because we don't have enough text around them
 \subsubsection{Censored majority}
+If censored miners mine faster than uncensored miners, the two forks will eventually grow to be of equal length. Censored miners will only be able to see one of the forked paths while uncensored miners will be able to see (and mine off of) both. This can be seen in Figures~\ref{fig:censored-majority} and~\ref{fig:censored-majority2}.
+
 
 \begin{figure}[h]
 \begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
@@ -76,7 +80,8 @@ To better understand what would happen if a node knew about the existence of a b
     \draw[->]             (majority1) |- (start);
     \draw[->]             (bad) -- (start);
 \end{tikzpicture}
-\caption{If censored miners mine faster than uncensored miners, the two forks will eventually grow to be of equal length}
+\caption{A model in which the majority of hash power is located behind the censor}
+\label{fig:censored-majority}
 \end{figure}
 
 \begin{figure}[h]
@@ -94,7 +99,10 @@ To better understand what would happen if a node knew about the existence of a b
     \draw[->]             (bad) -- (start);
 \end{tikzpicture}
 \caption{Uncensored miners can mine off of either block when the forked chains are of equal length}
+\label{fig:censored-majority2}
 \end{figure}
+
+In this scenario, one fork can be mined off of by all nodes while the other can only be mined off of by uncensored nodes. Therefore, the first fork is likely to grow more quickly than the second, meaning that it will become accepted as the main chain. This will prevent transactions containing censored keywords from ever being accepted into the main chain. See Figure~\ref{fig:censored-majority3}.
 
 \begin{figure}[h]
 \begin{tikzpicture}[every node/.style={node distance=1.5cm,fill=white, font=\sffamily}, align=center]
@@ -115,5 +123,6 @@ To better understand what would happen if a node knew about the existence of a b
     \draw[->]             (bad) -- (start);
     \draw[->]             (majority2) -- (majority1);
 \end{tikzpicture}
-\caption{Since the majority of mining power is mining off one fork, that fork will eventually grow to be longer than the other and all miners will agree on it }
+\caption{Since the majority of mining power is mining off one fork, that fork will eventually grow to be longer than the other and all miners will agree on it}
+\label{fig:censored-majority3}
 \end{figure}
