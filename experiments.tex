@@ -10,7 +10,7 @@ To check if the GFW would prevent the propagation of a Bitcoin block from crossi
 
 We attempted to send a variety of messages from our US machine to our CN machine and vice versa. We used the netcat UNIX utility to send ASCII messages. When we sent a message causing the GFW to block the connection, we expected the CN machine to be unable to reach the US machine on the same port for a few minutes, as described in~\ref{TODO}.
 
-After validating that the GFW was affecting traffic between our two machines, we will send test messgaes of various formats containing known-blocked words. For each type of message, we will record if the connection is blocked.
+After validating that the GFW was affecting traffic between our two machines, we sent test messages of various formats containing known-blocked words. For each type of message, we recorded if the connection is blocked.
 
 \subsubsection{Simulation}
 By simulating a small-scale version of the Bitcoin network with network censorship in place, we can examine how a censorship-induced fork would affect the network over time. The majority of Bitcoin nodes run \texttt{bitcoind}, the reference client implementation of the Bitcoin protocol ~\cite{shadow-bitcoin}.
@@ -21,9 +21,9 @@ Bitcoin Simulator~\cite{bitcoin-simulator} built on top of NS3~\cite{NS3} simula
 
 Shadow~\cite{shadow} running with its Bitcoin plugin~\cite{shadow-bitcoin} emulates real \texttt{bitcoind} clients in a simulated network that can be used to conduct experiments.
 
-The possible scenarios we want to examine fall into four categories:
+The possible scenarios we wanted to examine fall into four categories:
 \begin{enumerate}
-\item A majority of mining power is unaffected by censorship, meaning that the minority of mining power behind the censor cannot send/recieve messages containing a blacklisted word.
-\item A minority of mining power is unaffected by censorship, meaning that the majority of mining power behind the censor cannot send/recieve messages containing a blacklisted word.
+\item A majority of mining power is unaffected by censorship, meaning that the minority of mining power behind the censor cannot send/receive messages containing a blacklisted word.
+\item A minority of mining power is unaffected by censorship, meaning that the majority of mining power behind the censor cannot send/receive messages containing a blacklisted word.
 \item A majority of mining power is unaffected by censorship (partition $P1$), a minority of mining power cannot send/receive messages to/from $P1$ containing a blacklisted word ($P2$), and a small number of miners is unaffected by censorship and can communicate to both Partitions 1 and 2 without any censorship ($P3$).
 \end{enumerate}
