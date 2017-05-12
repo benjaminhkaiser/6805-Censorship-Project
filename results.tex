@@ -1,5 +1,4 @@
 \subsection{Results}
-
 \subsubsection{Firewall Testing}
 To test the GFW we first had to obtain access to a system with a censored Internet connection. When a message caused the GFW to block a connection, the connection was reset and the CN machine was unable to connect to the US machine on the same port for a few minutes.
 
@@ -10,7 +9,7 @@ In the end we determined that we would need to trick the GFW into interpreting a
 \subsubsection{Simulation}
 Initial analysis of the Bitcoin Simulator built on NS3 showed that the simulator didn't simulate at a high enough level of fidelity for us to conduct our desired experiments. Instead, we focused on using Shadow.
 
-We compiled version 0.9.2 of the \texttt{bitcoind} client\footnote{Shadow required us to use a slightly modified version of 0.9.2 available at https://github.com/amiller/bitcoin/tree/0.9.2-netmine} for use in Shadow. The published instructions for running Shadow's Bitcoin Plugin were significantly outdated, so we created a Docker container that builds their simulator and applies patches so that their original experiment can be recreated\footnote{The Dockerfile that builds this container is available at https://github.com/AndrewFasano/shadow-bitcoin-docker}. In our Docker container, we ran a network of 4 bitcoind clients communicating as we broadcast transactions and blocks to one of the clients.
+We compiled version 0.9.2 of the \texttt{bitcoind} client\footnote{Shadow required us to use a slightly modified version of 0.9.2 available at https://github.com/amiller/bitcoin/tree/0.9.2-netmine} for use in Shadow. The published instructions for running Shadow's Bitcoin Plugin were significantly outdated, so we created a Docker container that builds their simulator and applies patches so that their original experiment can be recreated\footnote{We have published the code and documentation required to build this container online at https://github.com/AndrewFasano/shadow-bitcoin-docker}. In our Docker container, we ran a network of 4 bitcoind clients communicating as we broadcast transactions and blocks to one of the clients.
 
 We patched the \texttt{bitcoind} client to drop messages it receives containing a ``blocked'' keyword.
 
